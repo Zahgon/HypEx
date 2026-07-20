@@ -31,7 +31,7 @@ class GroupOperator(
 
     @property
     def search_types(self):
-        return None
+        pass
 
     @classmethod
     @abstractmethod
@@ -41,15 +41,7 @@ class GroupOperator(
         raise AbstractMethodError
 
     def _get_fields(self, data: ExperimentData):
-        group_field = data.field_search(self.grouping_role)
-        target_fields = data.field_search(
-            self.target_roles, search_types=self.search_types
-        )
-        if len(target_fields) != 2:
-            target_fields += data.field_search(
-                AdditionalTargetRole(), search_types=self.search_types
-            )
-        return group_field, target_fields
+        pass
 
     @classmethod
     def _execute_inner_function(
@@ -58,18 +50,7 @@ class GroupOperator(
         target_fields: list[str] | None = None,
         **kwargs,
     ) -> dict:
-        if target_fields is None or len(target_fields) != 2:
-            raise ValueError(
-                f"This operator works with 2 targets, but got {len(target_fields) if target_fields else None}"
-            )
-        result = {}
-        for group, group_data in grouping_data:
-            result[group[0]] = cls._inner_function(
-                data=group_data[target_fields[0]],
-                test_data=group_data[target_fields[1]],
-                **kwargs,
-            )
-        return result
+        pass
 
     @classmethod
     def calc(
@@ -80,24 +61,9 @@ class GroupOperator(
         target_fields: str | list[str] | None = None,
         **kwargs,
     ) -> dict:
-        group_field = Adapter.to_list(group_field)
-
-        if grouping_data is None:
-            grouping_data = data.groupby(group_field)
-        if len(grouping_data) > 1:
-            grouping_data[0][1].tmp_roles = data.tmp_roles
-        else:
-            raise NotSuitableFieldError(group_field, "Grouping")
-        return cls._execute_inner_function(
-            grouping_data, target_fields=target_fields, old_data=data, **kwargs
-        )
+        pass
 
     def _set_value(
         self, data: ExperimentData, value: dict | None = None, key: Any = None
     ) -> ExperimentData:
-        data.set_value(
-            ExperimentDataEnum.variables,
-            self.id,
-            value,
-        )
-        return data
+        pass

@@ -9,7 +9,7 @@ from .abstract import DatasetReporter
 
 class HomoDictReporter(OneAADictReporter):
     def report(self, data: ExperimentData) -> dict[str, Any]:
-        return self.extract_data_from_analysis_tables(data)
+        pass
 
 
 class HomoDatasetReporter(DatasetReporter):
@@ -18,4 +18,4 @@ class HomoDatasetReporter(DatasetReporter):
 
     @staticmethod
     def convert_to_dataset(data: dict) -> dict[str, Dataset] | Dataset:
-        return HomoDictReporter.convert_flat_dataset(data)
+        pass

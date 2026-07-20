@@ -10,8 +10,4 @@ class DummyEncoder(Encoder):
     def _inner_function(
         data: Dataset, target_cols: str | None = None, **kwargs
     ) -> Dataset:
-        if not target_cols:
-            return Dataset.create_empty()
-        return DummyEncoderExtension().calc(
-            data=data, target_cols=target_cols, **kwargs
-        )
+        pass

@@ -17,11 +17,10 @@ class Shuffle(Calculator):
 
     @staticmethod
     def _inner_function(data: Dataset, random_state: int | None = None) -> Dataset:
-        return data.shuffle(random_state=random_state)
+        pass
 
     def generate_params_hash(self):
-        return f"{self.random_state}"
+        pass
 
     def execute(self, data: ExperimentData) -> ExperimentData:
-        result = data.copy(data=self.calc(data=data.ds, random_state=self.random_state))
-        return result
+        pass

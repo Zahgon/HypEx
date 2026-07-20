@@ -8,7 +8,7 @@ from ..utils import AbstractMethodError
 class Transformer(Calculator):
     @property
     def _is_transformer(self):
-        return True
+        pass
 
     @staticmethod
     @abstractmethod
@@ -17,8 +17,7 @@ class Transformer(Calculator):
 
     @classmethod
     def calc(cls, data: Dataset, **kwargs):
-        return cls._inner_function(data, **kwargs)
+        pass
 
     def execute(self, data: ExperimentData) -> ExperimentData:
-        data = data.copy(data=self.calc(data=data.ds))
-        return data
+        pass

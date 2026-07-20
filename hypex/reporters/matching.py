@@ -21,63 +21,33 @@ class MatchingDictReporter(DictReporter):
 
     @staticmethod
     def _convert_dataset_to_dict(data: Dataset) -> dict[str, Any]:
-        dict_data = data.to_dict()["data"]
-        indexes = dict_data["index"]
-        df = dict_data["data"]
-        result = {}
-        for key, values in df.items():
-            for index, value in zip(indexes, values):
-                result[f"{key}{ID_SPLIT_SYMBOL}{index}"] = value
-        return result
+        pass
 
     def _extract_from_analyser(self, data: ExperimentData):
-        analyzer_id = data.get_one_id(
-            self.searching_class, ExperimentDataEnum.analysis_tables
-        )
-        return self._convert_dataset_to_dict(data.analysis_tables[analyzer_id])
+        pass
 
     @staticmethod
     def _extract_from_additional_fields(data: ExperimentData):
-        indexes_id = data.get_ids(
-            FaissNearestNeighbors, ExperimentDataEnum.additional_fields
-        )[FaissNearestNeighbors.__name__][ExperimentDataEnum.additional_fields.value]
-        return {
-            f"indexes{ID_SPLIT_SYMBOL}{column.split(ID_SPLIT_SYMBOL)[3]}": MATCHING_INDEXES_SPLITTER_SYMBOL.join(
-                str(i)
-                for i in data.additional_fields[column].to_dict()["data"]["data"][
-                    column
-                ]
-            )
-            for column in indexes_id
-        }
+        pass
 
     def report(self, experiment_data: ExperimentData):
-        result = {}
-        result.update(self._extract_from_analyser(experiment_data))
-        if self.searching_class == MatchingAnalyzer:
-            result.update(self._extract_from_additional_fields(experiment_data))
-        return result
+        pass
 
 
 class MatchingQualityDictReporter(TestDictReporter):
     tests: ClassVar[list] = [TTest, KSTest, Chi2Test]
 
     def report(self, data: ExperimentData) -> dict[str, Any]:
-        return self.extract_tests(data)
+        pass
 
 
 class MatchingQualityDatasetReporter(MatchingQualityDictReporter):
     @classmethod
     def convert_flat_dataset(cls, data: dict) -> Dataset:
-        struct_dict = cls._get_struct_dict(data)
-        return cls._convert_struct_dict_to_dataset(struct_dict)
+        pass
 
     def report(self, data: ExperimentData):
-        front_buffer = self.front
-        self.front = False
-        dict_report = super().report(data)
-        self.front = front_buffer
-        return self.convert_flat_dataset(dict_report)
+        pass
 
 
 class MatchingDatasetReporter(DatasetReporter):

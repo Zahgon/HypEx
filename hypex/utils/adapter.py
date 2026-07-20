@@ -14,10 +14,4 @@ class Adapter:
 
     @staticmethod
     def list_to_single(data: list) -> Any:
-        if isinstance(data, list):
-            if len(data) == 0:
-                return None
-            elif len(data) == 1:
-                return data[0]
-            else:
-                raise ValueError("Only a list of a single item can be accepted")
+        pass

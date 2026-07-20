@@ -10,4 +10,4 @@ class HomoOutput(Output):
         super().__init__(resume_reporter=HomoDatasetReporter())
 
     def extract(self, experiment_data: ExperimentData):
-        super().extract(experiment_data)
+        pass

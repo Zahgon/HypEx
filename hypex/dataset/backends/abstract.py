@@ -9,7 +9,7 @@ from ...utils import AbstractMethodError, FromDictTypes
 class DatasetBackendNavigation(ABC):
     @property
     def name(self) -> str:
-        return str(self.__class__.__name__).lower().replace("backend", "")
+        pass
 
     @property
     @abstractmethod
@@ -40,7 +40,6 @@ class DatasetBackendNavigation(ABC):
     def __len__(self) -> int:
         raise AbstractMethodError
 
-    # Comparison methods:
     @abstractmethod
     def __eq__(self, other) -> Any:
         raise AbstractMethodError
@@ -65,7 +64,6 @@ class DatasetBackendNavigation(ABC):
     def __gt__(self, other) -> Any:
         raise AbstractMethodError
 
-    # Unary methods:
     @abstractmethod
     def __pos__(self) -> Any:
         raise AbstractMethodError
@@ -86,7 +84,6 @@ class DatasetBackendNavigation(ABC):
     def __round__(self, ndigits: int = 0) -> Any:
         raise AbstractMethodError
 
-    # Binary methods:
     @abstractmethod
     def __add__(self, other) -> Any:
         raise AbstractMethodError
@@ -127,7 +124,6 @@ class DatasetBackendNavigation(ABC):
     def __or__(self, other) -> Any:
         raise AbstractMethodError
 
-    # Right arithmetic methods:
     @abstractmethod
     def __radd__(self, other) -> Any:
         raise AbstractMethodError
@@ -406,7 +402,7 @@ class DatasetBackendCalc(DatasetBackendNavigation, ABC):
         regex: str | None = None,
         axis: int = 0,
     ) -> Any:
-        return AbstractMethodError
+        pass
 
     def fillna(self, values, method, **kwargs) -> Any:
         raise AbstractMethodError

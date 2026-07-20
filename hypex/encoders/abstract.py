@@ -24,18 +24,17 @@ class Encoder(Calculator):
 
     @property
     def __is_encoder(self):
-        return True
+        pass
 
     @property
     def search_types(self):
-        return [CategoricalTypes]
+        pass
 
     def _get_ids(self, col_name):
-        self.key = f"{NAME_BORDER_SYMBOL}{col_name}{NAME_BORDER_SYMBOL}"
-        return self.id
+        pass
 
     def _ids_to_names(self, col_names: list[str]):
-        return {col_name: self._get_ids(col_name) for col_name in col_names}
+        pass
 
     @staticmethod
     def _inner_function(data: Dataset, **kwargs) -> Dataset:
@@ -44,21 +43,7 @@ class Encoder(Calculator):
     def _set_value(
         self, data: ExperimentData, value: Dataset, key=None
     ) -> ExperimentData:
-        return data.set_value(
-            space=ExperimentDataEnum.additional_fields,
-            executor_id=self._ids_to_names(value.columns),
-            value=value,
-            role=value.roles,
-        )
+        pass
 
     def execute(self, data: ExperimentData) -> ExperimentData:
-        target_cols = data.ds.search_columns(
-            roles=self.target_roles, search_types=self.search_types
-        )
-        if not target_cols:
-            return data
-        return self._set_value(
-            data=data,
-            value=self.calc(data=data.ds, target_cols=target_cols),
-            key=self.key,
-        )
+        pass

@@ -42,20 +42,7 @@ class NaFiller(Transformer):
         values: ScalarType | dict[str, ScalarType] | None = None,
         method: Literal["bfill", "ffill"] | None = None,
     ) -> Dataset:
-        target_cols = Adapter.to_list(target_cols)
-        for column in target_cols:
-            value = values[column] if isinstance(values, dict) else values
-            data[column] = data[column].fillna(values=value, method=method)
-        return data
+        pass
 
     def execute(self, data: ExperimentData) -> ExperimentData:
-        target_cols = data.ds.search_columns(roles=self.target_roles)
-        result = data.copy(
-            data=self.calc(
-                data=data.ds,
-                target_cols=target_cols,
-                values=self.values,
-                method=self.method,
-            )
-        )
-        return result
+        pass

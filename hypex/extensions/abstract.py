@@ -20,29 +20,26 @@ class Extension(ABC):
         raise AbstractMethodError
 
     def calc(self, data: Dataset, **kwargs):
-        return self.BACKEND_MAPPING[type(data.backend)](data=data, **kwargs)
+        pass
 
     @staticmethod
     def result_to_dataset(result: Any, roles: ABCRole | dict[str, ABCRole]) -> Dataset:
-        return DatasetAdapter.to_dataset(result, roles=roles)
+        pass
 
 
 class CompareExtension(Extension, ABC):
     def calc(self, data: Dataset, other: Dataset | None = None, **kwargs):
-        return super().calc(data=data, other=other, **kwargs)
+        pass
 
 
 class MLExtension(Extension):
-    #   TODO: add model
     def _calc_pandas(
         self,
         data: Dataset,
         mode: Literal["auto", "fit", "predict"] | None = None,
         **kwargs,
     ):
-        if mode in ["auto", "fit"]:
-            return self.fit(data, **kwargs)
-        return self.predict(data, **kwargs)
+        pass
 
     @abstractmethod
     def fit(self, X, Y=None, **kwargs):
@@ -57,4 +54,4 @@ class MLExtension(Extension):
         data: Dataset,
         **kwargs,
     ):
-        return super().calc(data=data, **kwargs)
+        pass

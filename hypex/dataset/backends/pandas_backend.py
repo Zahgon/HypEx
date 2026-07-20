@@ -13,13 +13,7 @@ from .abstract import DatasetBackendCalc, DatasetBackendNavigation
 class PandasNavigation(DatasetBackendNavigation):
     @staticmethod
     def _read_file(filename: str | Path) -> pd.DataFrame:
-        file_extension = Path(filename).suffix
-        if file_extension == ".csv":
-            return pd.read_csv(filename)
-        elif file_extension == ".xlsx":
-            return pd.read_excel(filename)
-        else:
-            raise ValueError(f"Unsupported file extension {file_extension}")
+        pass
 
     def __init__(self, data: pd.DataFrame | dict | str | pd.Series | None = None):
         if isinstance(data, pd.DataFrame):
@@ -53,12 +47,8 @@ class PandasNavigation(DatasetBackendNavigation):
 
     @staticmethod
     def __magic_determine_other(other) -> Any:
-        if isinstance(other, PandasDataset):
-            return other.data
-        else:
-            return other
+        pass
 
-    # comparison operators:
     def __eq__(self, other) -> Any:
         return self.data == self.__magic_determine_other(other)
 
@@ -77,7 +67,6 @@ class PandasNavigation(DatasetBackendNavigation):
     def __gt__(self, other) -> Any:
         return self.data > self.__magic_determine_other(other)
 
-    # Unary operations:
     def __pos__(self) -> Any:
         return +self.data
 
@@ -93,7 +82,6 @@ class PandasNavigation(DatasetBackendNavigation):
     def __round__(self, ndigits: int = 0) -> Any:
         return round(self.data, ndigits)
 
-    # Binary operations:
     def __add__(self, other) -> Any:
         return self.data + self.__magic_determine_other(other)
 
@@ -124,7 +112,6 @@ class PandasNavigation(DatasetBackendNavigation):
     def __or__(self, other) -> Any:
         return self.data | self.__magic_determine_other(other)
 
-    # Right arithmetic operators:
     def __radd__(self, other) -> Any:
         return self.__magic_determine_other(other) + self.data
 
@@ -153,67 +140,42 @@ class PandasNavigation(DatasetBackendNavigation):
         return self.data.__repr__()
 
     def _repr_html_(self):
-        return self.data._repr_html_()
+        pass
 
     def create_empty(
         self,
         index: Iterable | None = None,
         columns: Iterable[str] | None = None,
     ):
-        self.data = pd.DataFrame(index=index, columns=columns)
-        return self
+        pass
 
     @property
     def index(self):
-        return self.data.index
+        pass
 
     @property
     def columns(self):
-        return self.data.columns
+        pass
 
     @property
     def shape(self):
-        return self.data.shape
+        pass
 
     def _get_column_index(
         self, column_name: Sequence[str] | str
     ) -> int | Sequence[int]:
-        return (
-            self.data.columns.get_loc(column_name)
-            if isinstance(column_name, str)
-            else self.data.columns.get_indexer(column_name)
-        )[0]
+        pass
 
     def get_column_type(self, column_name: str) -> type | None:
-        dtype = self.data.dtypes[column_name]
-        if pd.api.types.is_integer_dtype(dtype):
-            return int
-        elif pd.api.types.is_float_dtype(dtype):
-            return float
-        elif pd.api.types.is_object_dtype(dtype) and pd.api.types.is_list_like(
-            self.data[column_name].iloc[0]
-        ):
-            return object
-        elif (
-            pd.api.types.is_string_dtype(dtype)
-            or pd.api.types.is_object_dtype(dtype)
-            or dtype.name == "category"
-        ):
-            return str
-        elif pd.api.types.is_bool_dtype(dtype):
-            return bool
-        else:
-            return None
+        pass
 
     def astype(
         self, dtype: dict[str, type], errors: Literal["raise", "ignore"] = "raise"
     ) -> pd.DataFrame:
-        return self.data.astype(dtype=dtype, errors=errors)
+        pass
 
     def update_column_type(self, column_name: str, type_name: type):
-        if self.data[column_name].isna().sum() == 0:
-            self.data = self.data.astype({column_name: type_name})
-        return self
+        pass
 
     def add_column(
         self,
@@ -221,20 +183,7 @@ class PandasNavigation(DatasetBackendNavigation):
         name: str | list[str],
         index: Sequence | None = None,
     ):
-        if isinstance(name, list) and len(name) == 1:
-            name = name[0]
-        if isinstance(data, pd.DataFrame):
-            data = data.values
-        if len(self.data) != len(data):
-            if isinstance(data[0], Iterable) and len(data[0]) == 1:
-                data = data.squeeze()
-            data = pd.Series(data)
-        if index:
-            self.data = self.data.join(
-                pd.DataFrame(data, columns=[name], index=list(index))
-            )
-        else:
-            self.data.loc[:, name] = data
+        pass
 
     def append(self, other, reset_index: bool = False, axis: int = 0) -> pd.DataFrame:
         new_data = pd.concat([self.data] + [d.data for d in other], axis=axis)
@@ -243,46 +192,25 @@ class PandasNavigation(DatasetBackendNavigation):
         return new_data
 
     def from_dict(self, data: FromDictTypes, index: Iterable | Sized | None = None):
-        if isinstance(data, dict):
-            self.data = pd.DataFrame().from_records(data, columns=list(data.keys()))
-        else:
-            self.data = pd.DataFrame().from_records(data)
-        if index is not None:
-            self.data.index = index
-        return self
+        pass
 
     def to_dict(self) -> dict[str, Any]:
-        return {
-            "data": {
-                column: self.data[column].to_list() for column in self.data.columns
-            },
-            "index": list(self.index),
-        }
+        pass
 
     def to_records(self) -> list[dict]:
-        return self.data.to_dict(orient="records")
+        pass
 
     def loc(self, items: Iterable) -> Iterable:
-        data = self.data.loc[items]
-        if not isinstance(data, Iterable) or isinstance(data, str):
-            data = [data]
-        return data if isinstance(data, pd.DataFrame) else pd.DataFrame(data)
+        pass
 
     def iloc(self, items: Iterable) -> Iterable:
-        data = self.data.iloc[items]
-        if not isinstance(data, Iterable) or isinstance(data, str):
-            data = [data]
-        return data if isinstance(data, pd.DataFrame) else pd.DataFrame(data)
+        pass
 
 
 class PandasDataset(PandasNavigation, DatasetBackendCalc):
     @staticmethod
     def _convert_agg_result(result):
-        if isinstance(result, pd.Series):
-            result = result.to_frame()
-        if result.shape[0] == 1 and result.shape[1] == 1:
-            return float(result.loc[result.index[0], result.columns[0]])
-        return result if isinstance(result, pd.DataFrame) else pd.DataFrame(result)
+        pass
 
     def __init__(self, data: pd.DataFrame | dict | str | pd.Series | None = None):
         super().__init__(data)
@@ -292,140 +220,110 @@ class PandasDataset(PandasNavigation, DatasetBackendCalc):
         key,
         default=None,
     ) -> Any:
-        return self.data.get(key, default)
+        pass
 
     def take(
         self,
         indices: int | list[int],
         axis: Literal["index", "columns", "rows"] | int = 0,
     ) -> Any:
-        return self.data.take(indices=indices, axis=axis)
+        pass
 
     def get_values(
         self,
         row: str | None = None,
         column: str | None = None,
     ) -> Any:
-        if (column is not None) and (row is not None):
-            return self.data.loc[row, column]
-        elif column is not None:
-            result = self.data.loc[:, column]
-        elif row is not None:
-            result = self.data.loc[row, :]
-        else:
-            result = self.data
-        return result.values.tolist()
+        pass
 
     def iget_values(
         self,
         row: int | None = None,
         column: int | None = None,
     ) -> Any:
-        if (column is not None) and (row is not None):
-            return self.data.iloc[row, column]
-        elif column is not None:
-            result = self.data.iloc[:, column]
-        elif row is not None:
-            result = self.data.iloc[row, :]
-        else:
-            result = self.data
-        return result.values.tolist()
+        pass
 
     def apply(self, func: Callable, **kwargs) -> pd.DataFrame:
-        single_column_name = kwargs.pop("column_name")
-        result = self.data.apply(func, **kwargs)
-        if not isinstance(result, pd.DataFrame):
-            result = result.to_frame(name=single_column_name)
-        return result
+        pass
 
     def map(self, func: Callable, **kwargs) -> pd.DataFrame:
-        return self.data.map(func, **kwargs)
+        pass
 
     def is_empty(self) -> bool:
-        return self.data.empty
+        pass
 
     def unique(self):
-        return {column: self.data[column].unique() for column in self.data.columns}
+        pass
 
     def nunique(self, dropna: bool = True):
-        return {column: self.data[column].nunique() for column in self.data.columns}
+        pass
 
     def groupby(self, by: str | Iterable[str], **kwargs) -> list[tuple]:
-        groups = self.data.groupby(by=by, observed=False, **kwargs)
-        return list(groups)
+        pass
 
     def agg(self, func: str | list, **kwargs) -> pd.DataFrame | float:
-        func = func if isinstance(func, (list, dict)) else [func]
-        result = self.data.agg(func, **kwargs)
-        return self._convert_agg_result(result)
+        pass
 
     def max(self) -> pd.DataFrame | float:
-        return self.agg(["max"])
+        pass
 
     def idxmax(self) -> pd.DataFrame | float:
-        return self.agg(["idxmax"])
+        pass
 
     def min(self) -> pd.DataFrame | float:
-        return self.agg(["min"])
+        pass
 
     def count(self) -> pd.DataFrame | float:
-        return self.agg(["count"])
+        pass
 
     def sum(self) -> pd.DataFrame | float:
-        return self.agg(["sum"])
+        pass
 
     def mean(self) -> pd.DataFrame | float:
-        return self.agg(["mean"])
+        pass
 
     def mode(
         self, numeric_only: bool = False, dropna: bool = True
     ) -> pd.DataFrame | float:
-        return self.data.mode(numeric_only=numeric_only, dropna=dropna)
+        pass
 
     def var(
         self, skipna: bool = True, ddof: int = 1, numeric_only: bool = False
     ) -> pd.DataFrame | float:
-        return self.agg(["var"], skipna=skipna, ddof=ddof, numeric_only=numeric_only)
+        pass
 
     def log(self) -> pd.DataFrame:
-        np_data = np.log(self.data.to_numpy())
-        return pd.DataFrame(np_data, columns=self.data.columns)
+        pass
 
     def std(self, skipna: bool = True, ddof: int = 1) -> pd.DataFrame | float:
-        return self.agg(["std"], skipna=skipna, ddof=ddof)
+        pass
 
     def cov(self):
-        return self.data.cov(ddof=1)
+        pass
 
     def quantile(self, q: float = 0.5) -> pd.DataFrame:
-        if isinstance(q, list) and len(q) > 1:
-            return self.data.quantile(q=q)
-        return self.agg(func="quantile", q=q)
+        pass
 
     def coefficient_of_variation(self) -> pd.DataFrame | float:
-        data = (self.data.std() / self.data.mean()).to_frame().T
-        data.index = ["cv"]
-        if data.shape[0] == 1 and data.shape[1] == 1:
-            return float(data.loc[data.index[0], data.columns[0]])
-        return data if isinstance(data, pd.DataFrame) else pd.DataFrame(data)
+        pass
 
     def sort_index(self, ascending: bool = True, **kwargs) -> pd.DataFrame:
-        return self.data.sort_index(ascending=ascending, **kwargs)
+        pass
 
     def corr(
         self,
         method: Literal["pearson", "kendall", "spearman"] = "pearson",
         numeric_only: bool = False,
     ) -> pd.DataFrame | float:
-        return self.data.corr(method=method, numeric_only=numeric_only)
+        pass
 
     def isna(self) -> pd.DataFrame:
-        return self.data.isna()
+        pass
 
     def sort_values(
         self, by: str | list[str], ascending: bool = True, **kwargs
     ) -> pd.DataFrame:
-        return self.data.sort_values(by=by, ascending=ascending, **kwargs)
+        pass
 
     def value_counts(
         self,
@@ -434,9 +332,7 @@ class PandasDataset(PandasNavigation, DatasetBackendCalc):
         ascending: bool = False,
         dropna: bool = True,
     ) -> pd.DataFrame:
-        return self.data.value_counts(
-            normalize=normalize, sort=sort, ascending=ascending, dropna=dropna
-        ).reset_index()
+        pass
 
     def fillna(
         self,
@@ -444,38 +340,13 @@ class PandasDataset(PandasNavigation, DatasetBackendCalc):
         method: Literal["bfill", "ffill"] | None = None,
         **kwargs,
     ) -> pd.DataFrame:
-        if method is not None:
-            if method == "bfill":
-                return self.data.bfill(**kwargs)
-            elif method == "ffill":
-                return self.data.ffill(**kwargs)
-            else:
-                raise ValueError(f"Wrong fill method: {method}")
-
-        return self.data.fillna(value=values, **kwargs)
+        pass
 
     def na_counts(self) -> pd.DataFrame | int:
-        data = self.data.isna().sum().to_frame().T
-        data.index = ["na_counts"]
-        if data.shape[0] == 1 and data.shape[1] == 1:
-            return int(data.loc[data.index[0], data.columns[0]])
-        return data if isinstance(data, pd.DataFrame) else pd.DataFrame(data)
+        pass
 
     def dot(self, other: PandasDataset | np.ndarray) -> pd.DataFrame:
-        if isinstance(other, np.ndarray):
-            other_df = pd.DataFrame(
-                data=other,
-                columns=self.columns if other.shape[1] == self.shape[1] else None,
-            )
-            # print(other_df.shape)
-            # print(self.data.shape)
-            result = self.data.dot(other_df.T)
-            result.columns = (
-                self.columns if other.shape[1] == self.shape[1] else result.columns
-            )
-        else:
-            result = self.data.dot(other.data)
-        return result if isinstance(result, pd.DataFrame) else pd.DataFrame(result)
+        pass
 
     def dropna(
         self,
@@ -483,13 +354,10 @@ class PandasDataset(PandasNavigation, DatasetBackendCalc):
         subset: str | Iterable[str] | None = None,
         axis: Literal["index", "rows", "columns"] | int = 0,
     ) -> pd.DataFrame:
-        return self.data.dropna(how=how, subset=subset, axis=axis)
+        pass
 
     def transpose(self, names: Sequence[str] | None = None) -> pd.DataFrame:
-        result = self.data.transpose()
-        if names is not None:
-            result.columns = names
-        return result if isinstance(result, pd.DataFrame) else pd.DataFrame(result)
+        pass
 
     def sample(
         self,
@@ -497,17 +365,17 @@ class PandasDataset(PandasNavigation, DatasetBackendCalc):
         n: int | None = None,
         random_state: int | None = None,
     ) -> pd.DataFrame:
-        return self.data.sample(n=n, frac=frac, random_state=random_state)
+        pass
 
     def select_dtypes(
         self,
         include: str | None = None,
         exclude: str | None = None,
     ) -> pd.DataFrame:
-        return self.data.select_dtypes(include=include, exclude=exclude)
+        pass
 
     def isin(self, values: Iterable) -> Iterable[bool]:
-        return self.data.isin(values)
+        pass
 
     def merge(
         self,
@@ -520,34 +388,7 @@ class PandasDataset(PandasNavigation, DatasetBackendCalc):
         suffixes: tuple[str, str] = ("_x", "_y"),
         how: Literal["left", "right", "inner", "outer", "cross"] = "inner",
     ) -> pd.DataFrame:
-        for on_ in [on, left_on, right_on]:
-            if on_ and (
-                on_ not in [*self.columns, *right.columns]
-                if isinstance(on_, str)
-                else any(c not in [*self.columns, *right.columns] for c in on_)
-            ):
-                raise MergeOnError(on_)
-
-        if not all(
-            [
-                on,
-                left_on,
-                right_on,
-            ]
-        ) and all([left_index is None, right_index is None]):
-            left_index = True
-            right_index = True
-
-        return self.data.merge(
-            right=right.data,
-            on=on,
-            left_on=left_on,
-            right_on=right_on,
-            left_index=left_index,
-            right_index=right_index,
-            suffixes=suffixes,
-            how=how,
-        )
+        pass
 
     def drop(
         self,
@@ -555,7 +396,7 @@ class PandasDataset(PandasNavigation, DatasetBackendCalc):
         axis: int | None = None,
         columns: str | Iterable[str] | None = None,
     ) -> pd.DataFrame:
-        return self.data.drop(labels=labels, axis=axis, columns=columns)
+        pass
 
     def filter(
         self,
@@ -564,35 +405,18 @@ class PandasDataset(PandasNavigation, DatasetBackendCalc):
         regex: str | None = None,
         axis: int = 0,
     ) -> pd.DataFrame:
-        return self.data.filter(items=items, like=like, regex=regex, axis=axis)
+        pass
 
     def rename(self, columns: dict[str, str]) -> pd.DataFrame:
-        return self.data.rename(columns=columns)
+        pass
 
     def replace(
         self, to_replace: Any = None, value: Any = None, regex: bool = False
     ) -> pd.DataFrame:
-        if isinstance(to_replace, pd.DataFrame) and len(to_replace.columns) == 1:
-            to_replace = to_replace.iloc[:, 0]
-        elif isinstance(to_replace, pd.Series):
-            to_replace = to_replace.to_list()
-        elif isinstance(to_replace, dict):
-            return self.data.replace(to_replace=to_replace, regex=regex)
-        return self.data.replace(to_replace=to_replace, value=value, regex=regex)
+        pass
 
     def reindex(self, labels: str = "", fill_value: str | None = None) -> pd.DataFrame:
-        return self.data.reindex(labels, fill_value=fill_value)
+        pass
 
     def list_to_columns(self, column: str) -> pd.DataFrame:
-        data = self.data
-        n_cols = len(data.loc[0, column])
-
-        data_expanded = (
-            pd.DataFrame(
-                data[column].to_list(), columns=[f"{column}_{i}" for i in range(n_cols)]
-            )
-            if n_cols > 1
-            else data
-        )
-
-        return data_expanded
+        pass

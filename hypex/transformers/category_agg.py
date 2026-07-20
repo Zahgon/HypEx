@@ -24,7 +24,7 @@ class CategoryAggregator(Transformer):
 
     @property
     def search_types(self):
-        return [CategoricalTypes]
+        pass
 
     @staticmethod
     def _inner_function(
@@ -33,28 +33,7 @@ class CategoryAggregator(Transformer):
         threshold: int | None = 15,
         new_group_name: str | None = None,
     ) -> Dataset:
-        target_cols = Adapter.to_list(target_cols)
-        for column in target_cols:
-            categories_counts = data[column].value_counts()
-            values_to_replace = categories_counts[
-                categories_counts["count"] < threshold
-            ][column].get_values(column=column)
-            data[column] = data[column].replace(
-                to_replace=values_to_replace, value=new_group_name
-            )
-
-        return data
+        pass
 
     def execute(self, data: ExperimentData) -> ExperimentData:
-        target_cols = data.ds.search_columns(
-            roles=self.target_roles, search_types=self.search_types
-        )
-        result = data.copy(
-            data=self.calc(
-                data=data.ds,
-                target_cols=target_cols,
-                threshold=self.threshold,
-                new_group_name=self.new_group_name,
-            )
-        )
-        return result
+        pass

@@ -20,28 +20,19 @@ class ABCRole(ABC):
 
     @property
     def role_name(self) -> str:
-        return self._role_name
+        pass
 
     def __repr__(self) -> str:
         return f"{self._role_name}({self.data_type})"
 
     def astype(self, data_type: DefaultRoleTypes | None = None) -> ABCRole:
-        role = deepcopy(self)
-        role.data_type = data_type
-        return role
+        pass
 
     def asadditional(self, data_type: DefaultRoleTypes | None = None) -> ABCRole:
-        data_type = data_type or self.data_type
-        for role_type in list(default_roles.values()):
-            if isinstance(role_type, self.__class__) and isinstance(
-                role_type, AdditionalRole
-            ):
-                return role_type.__class__(data_type)
-        return self.__class__(data_type)
+        pass
 
 
 class LagRole(ABCRole):
-    """Base class for roles that support temporal metadata (parent, lag)."""
 
     def __init__(
         self,
@@ -144,7 +135,6 @@ class ConstGroupRole(ABCRole):
     _role_name: RoleNameType = "ConstGroup"
 
 
-# ___________________________________________________________________________________________
 class TempRole(ABCRole):
     _role_name: RoleNameType = "Temp"
 
@@ -169,7 +159,6 @@ class ReportRole(ABCRole):
     _role_name: RoleNameType = "Report"
 
 
-# ___________________________________________________________________________________________
 class AdditionalRole(ABCRole):
     _role_name: RoleNameType = "Additional"
 
